@@ -1,26 +1,69 @@
+import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          {/* Edit <code>src/App.js</code> and save to reload. */}
-          Hello! My name is Kash!
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      isClicked: false,
+      inputValue: "",
+      todos: [],
+    };
+  }
+
+  onClickHandler = () => {
+    this.setState({
+      isClicked: !this.state.isClicked,
+    });
+  };
+
+  onChangeHandler = ({ target }) => {
+    console.log(target.value);
+    this.setState({
+      text: target.value,
+    });
+  };
+
+  onAddTodoClick = () => {
+    this.setState({
+      todos: [this.state.text, ...this.state.todos],
+    });
+    console.log(this.state);
+  };
+
+  handleDelete = (idx) => {
+    this.setState({
+      todos: this.state.todos.filter((todo, i) => i !== idx),
+    });
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <button type="button" onClick={this.onClickHandler}>
+          {this.state.isClicked ? "It is Clicked!" : "It is Not Clicked!"}
+        </button>
+        <br />
+        <input type="text" onChange={this.onChangeHandler}></input>
+        <p>{this.state.text}</p>
+        <button type="button" onClick={this.onAddTodoClick}>
+          Add Todo
+        </button>
+        {this.state.todos.map((todo, idx) => {
+          return (
+            <li key={idx}>
+              {todo}
+              <button type="button" onClick={() => this.handleDelete(idx)}>
+                Delete
+              </button>
+            </li>
+          );
+        })}
+      </div>
+    );
+  }
 }
 
 export default App;
